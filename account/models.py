@@ -28,7 +28,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    '''Модель пользователя'''
     email = models.EmailField('Электронная почта', primary_key=True)
     name = models.CharField('Имя', max_length=50)
     last_name = models.CharField("Фамилия", max_length=50, blank=True)
@@ -54,8 +53,6 @@ class User(AbstractBaseUser):
     # какие пользователи могут иметь доступ к админ панели
     def has_module_perms(self, app_label):
         return self.is_staff
-
-    # request.user.has_module_perms
 
     def has_perm(self, obj=None):
         return self.is_staff

@@ -1,23 +1,23 @@
 from rest_framework import serializers
 
-from post.models import Product, Comment
+from post.models import Post, Comment
 
 
-class ProductListSerializer(serializers.ModelSerializer):
+class PostListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        fields = ('id', 'title', 'text', 'price', 'user')
+        model = Post
+        fields = ('id', 'title', 'text', 'user')
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
+class PostDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
+        model = Post
         fields = '__all__'
 
 
-class CreateProductSerializer(serializers.ModelSerializer):
+class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
+        model = Post
         exclude = ('user', )
 
     def create(self, validated_data):
@@ -27,13 +27,13 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(write_only=True,
-                                                 queryset=Product.objects.all())
+    post = serializers.PrimaryKeyRelatedField(write_only=True,
+                                                 queryset=Post.objects.all())
     user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('user', 'text', 'post', )
+        fields = ('user', 'text', 'post',)
 
     def create(self, validated_data):
         request = self.context.get('request')

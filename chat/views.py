@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
-from chat_room.models import Room, Chat
-from chat_room.serializers import RoomSerializers, ChatSerializers, ChatPostSerializers, UserSerializer
+from chat.models import Room, Chat
+from chat.serializers import RoomSerializers, ChatSerializers, ChatPostSerializers, UserSerializer
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework import permissions
@@ -26,7 +25,6 @@ class Dialog(APIView):
         return Response({"data": serializer.data})
 
     def post(self, request):
-        # room = request.data.get("room")
         dialog = ChatPostSerializers(data=request.data)
         if dialog.is_valid():
             dialog.save(user=request.user)

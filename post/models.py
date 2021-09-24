@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -12,6 +11,7 @@ STATUS_CHOICES = (
 
 
 class Post(models.Model):
+    user = models.ForeignKey(User, related_name='author', on_delete=models.CASCADE)
     title = models.CharField('Заголовок', max_length=255)
     image = models.ImageField('Картинка', upload_to='posts', blank=True)
     text = models.TextField('Текст')
@@ -28,7 +28,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    product = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments',
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments',
                                 verbose_name='Объявление')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name='Автор')
     text = models.TextField('Текст')
@@ -46,7 +46,7 @@ class Comment(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(get_user_model(), related_name='likes', on_delete=models.CASCADE)
     content_type = models.ForeignKey(Post, on_delete=models.CASCADE)
-    like = models.BooleanField(default=False)
+    like = models.BooleanField(unique=True, default=False)
 
     class Meta:
         verbose_name = 'Лайк'
